@@ -22,7 +22,7 @@ package org.java.number.extension.parsing;
  * <p>
  * @author Alexander A. Kropotin
  */
-public interface NumberParsing <T extends Number> {
+public interface ParsingStrategy<T extends Number> {
 
     /**
      * Parse number from dirty string value.
