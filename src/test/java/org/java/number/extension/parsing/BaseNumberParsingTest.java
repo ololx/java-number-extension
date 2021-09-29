@@ -41,14 +41,16 @@ public class BaseNumberParsingTest {
                 arguments(1.0, "01.0"),
                 arguments(1.0, "1.0"),
                 arguments(1.0, "1.0E0"),
-                arguments(1.0, "1FckUp.0")
+                arguments(1.0, "1FckUp.0"),
+                arguments(10000.0, "1E+2E+2"),
+                arguments(100.0, "1E2E-2E+2")
         );
     }
 
     @DisplayName("[positive]: test number parsing from string with dirty symbols")
     @MethodSource("getXAngleTestParamsProvider")
     @ParameterizedTest
-    public void getXAngle_createPointByCartesianXYCoordinates_returnRightPolarXAngle(Number expectedValue, String originValue) {
+    public void parse_parseDirtyStringWithNnDigitSymbols_returnNumber(Number expectedValue, String originValue) {
         Number actualValue = new BaseParsingStrategy().apply(originValue);
 
         assertTrue(

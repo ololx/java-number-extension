@@ -38,7 +38,7 @@ public class BaseParsingStrategy implements ParsingStrategy<Number> {
         int numberSign = value.charAt(0) == '-' ? -1 : 1;
         double integer = 0d;
         double fractional = 0d;
-        List<Double> exponents = new ArrayList<>();
+        double exponent = 1d;
 
         int pointer = numberSign == -1 ? 1 : 0;
         while (pointer < value.length()) {
@@ -79,14 +79,12 @@ public class BaseParsingStrategy implements ParsingStrategy<Number> {
                     pointer++;
                 }
 
-                if (exponentPower != 0) exponents.add(Math.pow(10, exponentPower));
+                if (exponentPower != 0) exponent *= Math.pow(10, exponentPower);
             }
 
             pointer++;
         }
 
-        return !isPresent
-                ? null
-                : (integer + fractional) * numberSign * exponents.stream().reduce((n, n2) -> n * n2).orElse(1d);
+        return !isPresent ? null : (integer + fractional) * numberSign * exponent;
     }
 }
