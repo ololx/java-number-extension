@@ -43,7 +43,10 @@ public class BaseNumberParsingTest {
                 arguments(1.0, "1.0E0"),
                 arguments(1.0, "1FckUp.0"),
                 arguments(10000.0, "1E+2E+2"),
-                arguments(100.0, "1E2E-2E+2")
+                arguments(100.0, "1E2E-2E+2"),
+                arguments(47.82, "47,8кгс/мм2"),
+                arguments(47.82, "47,8кгсмм2"),
+                arguments(47.123456, "47,123кгс/мм456")
         );
     }
 
