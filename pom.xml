@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.java.number.extension</groupId>
+    <artifactId>java-number-extension</artifactId>
+    <version>${revision}${sha1}${changelist}</version>
+    <name>java-number-extension</name>
+    <description>
+        This is a lightweight java library for java numbers parsing.
+    </description>
+    <url>https://github.com/ololx/java-number-extension-</url>
+    <inceptionYear>2021</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://github.com/ololx/java-number-extension/LICENSE</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Alexander A. Kropotin</name>
+            <email>ololx@icloud.com</email>
+            <roles>
+                <role>initial work</role>
+                <role>author</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <!--<project versioning-->
+        <revision>0.0.1</revision>
+        <changelist></changelist>
+        <sha1/>
+        <!--project versioning>-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.9</java.version>
+        <junit-jupiter.version>5.5.2</junit-jupiter.version>
+        <github.global.server>github</github.global.server>
+        <github.maven-plugin>0.12</github.maven-plugin>
+    </properties>
+
+    <!--<deploy on repository-->
+    <distributionManagement>
+        <repository>
+            <id>java-number-extension.repository</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${project.build.directory}/java-number-extension-repository</url>
+        </repository>
+    </distributionManagement>
+    <!--deploy on repository>-->
+
+    <dependencies>
+        <!--<test-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!--test/>-->
+    </dependencies>
+    <build>
+        <plugins>
+            <!--<compiler-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <!--compiler>-->
+            <!--<deploy on repository-->
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <altDeploymentRepository>
+                        java-number-extension.repository::default::file://${project.build.directory}/java-number-extension-repository
+                    </altDeploymentRepository>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${github.maven-plugin}</version>
+                <configuration>
+                    <message>Maven artifacts for java-number-extension project ${revision}${sha1}${changelist}</message>
+                    <noJekyll>true</noJekyll>
+                    <outputDirectory>${project.build.directory}/java-number-extension-repository</outputDirectory>
+                    <branch>refs/heads/java-number-extension-repository</branch>
+                    <repositoryName>java-number-extension</repositoryName>
+                    <repositoryOwner>ololx</repositoryOwner>
+                    <!--<includes>
+                        <include></include>
+                    </includes>
+                    <excludes>
+                        <exclude></exclude>
+                    </excludes>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--deploy on repository>-->
+        </plugins>
+    </build>
+</project>
