@@ -16,9 +16,6 @@
  */
 package org.java.number.extension.parsing;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @project java-number-extension
  * @created 2021-09-29 12:51
@@ -85,6 +82,6 @@ public class BaseParsingStrategy implements ParsingStrategy<Number> {
             pointer++;
         }
 
-        return !isPresent ? null : (integer + fractional) * numberSign * exponent;
+        return !isPresent ? null : ((integer + fractional) * numberSign * exponent);
     }
 }

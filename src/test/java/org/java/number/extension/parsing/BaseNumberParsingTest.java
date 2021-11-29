@@ -17,10 +17,12 @@
 package org.java.number.extension.parsing;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,7 +37,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 @DisplayName("The BaseNumberParsing test cases")
 public class BaseNumberParsingTest {
 
-    static Stream<Arguments> getXAngleTestParamsProvider() {
+    static Stream<Arguments> getDirtyStringsForTestParamsProvider() {
         return Stream.of(
                 arguments(1.0, "01"),
                 arguments(1.0, "01.0"),
@@ -48,10 +50,22 @@ public class BaseNumberParsingTest {
     }
 
     @DisplayName("[positive]: test number parsing from string with dirty symbols")
-    @MethodSource("getXAngleTestParamsProvider")
+    @MethodSource("getDirtyStringsForTestParamsProvider")
     @ParameterizedTest
-    public void parse_parseDirtyStringWithNnDigitSymbols_returnNumber(Number expectedValue, String originValue) {
+    public void parse_parseDirtyStringWithDigitSymbols_returnNumber(Number expectedValue, String originValue) {
         Number actualValue = new BaseParsingStrategy().apply(originValue);
+
+        assertTrue(
+                actualValue.equals(expectedValue),
+                String.format("Expected %s, but was %s", expectedValue, actualValue)
+        );
+    }
+
+    @MethodSource("getDirtyStringsForTestParamsProvider")
+    @ParameterizedTest
+    public void parse_parseDirtyStringWithDigitSymbols_returnConcreteNumber(Double expectedValue, String originValue) {
+        Double actualValue = NumberParser.newInstance().parse(new Double(0), originValue);
+        System.out.println(actualValue);
 
         assertTrue(
                 actualValue.equals(expectedValue),
