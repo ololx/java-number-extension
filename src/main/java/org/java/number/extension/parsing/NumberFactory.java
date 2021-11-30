@@ -32,6 +32,9 @@ public class NumberFactory {
 
         Constructor noArgsConstructor = null;
         for (int i = 0; i < constructors.length; i++) {
+            for (Class<?> classes : constructors[i].getParameterTypes()) {
+                System.err.println(i + " --- " + classes.getCanonicalName());
+            }
             if (constructors[i].getGenericParameterTypes().length == 0) {
                 noArgsConstructor = constructors[i];
                 break;

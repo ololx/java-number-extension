@@ -16,7 +16,7 @@
  */
 package org.java.number.extension.parsing;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -48,30 +48,45 @@ public final class NumberParser {
         this.parsingStrategies.putAll(parsingStrategies);
     }
 
-    public <T extends Number> T parse(T to, String from) {
-        ParsingStrategy parsingStrategy = this.getParsingStrategy(to.getClass());
+    public <T extends Number> T parse(Class<T> type, String from) {
+        ParsingStrategy parsingStrategy = this.getParsingStrategy(type.getClass());
 
-        T o = null;
+
+        Constructor constructor = null;
+        Class<?> primitiveType = null;
+        for (Constructor declaredConstructor : type.getDeclaredConstructors()) {
+            if (declaredConstructor.getGenericParameterTypes().length != 1) continue;
+
+            for (Class<?> parameterType : declaredConstructor.getParameterTypes()) {
+                if (!NumberTypeResolver.primitiveTypes.containsValue(parameterType)) continue;
+                if (primitiveType != null
+                        && NumberTypeResolver.typesNestingRules.get(parameterType) > NumberTypeResolver.typesNestingRules.get(primitiveType))
+                    continue;
+
+                primitiveType = parameterType;
+                constructor = declaredConstructor;
+            }
+        }
+
+        T number = null;
         try {
-            Class<T> class1 = (Class<T>) Class.forName(to.getClass().getCanonicalName());
-            Method method = class1.getMethod("valueOf", String.class);
-            o = (T) method.invoke(to, parsingStrategy.apply(from).toString());
-            System.out.println(o);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
+            Object res = parsingStrategy.apply(from);
+
+            if (constructor == null) {
+                Method method = type.getMethod("valueOf", String.class);
+                number = (T) method.invoke(type, res.toString());
+            }
+
+            number = (T) constructor.newInstance(
+                    res.getClass()
+                            .getMethod(NumberTypeResolver.primitiveTypes.get(primitiveType.getCanonicalName()).getCanonicalName() + "Value")
+                            .invoke(res)
+            );
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return o;
+        return number;
     }
 
     private ParsingStrategy getParsingStrategy(Class<?> type) {

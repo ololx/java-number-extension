@@ -17,7 +17,6 @@
 package org.java.number.extension.parsing;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -30,12 +29,12 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @project java-number-extension
- * @created 2021-09-29 12:59
+ * @created 2021-11-30 21:41
  * <p>
  * @author Alexander A. Kropotin
  */
 @DisplayName("The BaseNumberParsing test cases")
-public class BaseNumberParsingTest {
+public class NumberParserTest {
 
     static Stream<Arguments> getDirtyStringsForTestParamsProvider() {
         return Stream.of(
@@ -52,14 +51,46 @@ public class BaseNumberParsingTest {
         );
     }
 
-    @DisplayName("[positive]: test number parsing from string with dirty symbols")
     @MethodSource("getDirtyStringsForTestParamsProvider")
     @ParameterizedTest
-    public void apply_parseDirtyStringWithDigitSymbols_returnNumber(Number expectedValue, String originValue) {
-        Number actualValue = new BaseParsingStrategy().apply(originValue);
+    public void parse_parseDirtyStringWithDigitSymbols_returnDoubleNumber(Double expectedValue, String originValue) {
+        Double actualValue = NumberParser.newInstance().parse(Double.class, originValue);
 
         assertTrue(
                 actualValue.equals(expectedValue),
+                String.format("Expected %s, but was %s", expectedValue, actualValue)
+        );
+    }
+
+    @MethodSource("getDirtyStringsForTestParamsProvider")
+    @ParameterizedTest
+    public void parse_parseDirtyStringWithDigitSymbols_returnIntegerNumber(Double expectedValue, String originValue) {
+        Integer actualValue = NumberParser.newInstance().parse(Integer.class, originValue);
+
+        assertTrue(
+                actualValue.equals(expectedValue.intValue()),
+                String.format("Expected %s, but was %s", expectedValue, actualValue)
+        );
+    }
+
+    @MethodSource("getDirtyStringsForTestParamsProvider")
+    @ParameterizedTest
+    public void parse_parseDirtyStringWithDigitSymbols_returnFloatNumber(Double expectedValue, String originValue) {
+        Float actualValue = NumberParser.newInstance().parse(Float.class, originValue);
+
+        assertTrue(
+                actualValue.equals(expectedValue.floatValue()),
+                String.format("Expected %s, but was %s", expectedValue, actualValue)
+        );
+    }
+
+    @MethodSource("getDirtyStringsForTestParamsProvider")
+    @ParameterizedTest
+    public void parse_parseDirtyStringWithDigitSymbols_returnBigDecimalNumber(Double expectedValue, String originValue) {
+        BigDecimal actualValue = NumberParser.newInstance().parse(BigDecimal.class, originValue);
+
+        assertTrue(
+                actualValue.doubleValue() == expectedValue.doubleValue(),
                 String.format("Expected %s, but was %s", expectedValue, actualValue)
         );
     }
