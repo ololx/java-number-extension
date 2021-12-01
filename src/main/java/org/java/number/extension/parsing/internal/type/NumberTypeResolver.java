@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.java.number.extension.parsing;
+package org.java.number.extension.parsing.internal.type;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @project java-number-extension
@@ -26,13 +28,13 @@ import java.util.Map;
  */
 public class NumberTypeResolver {
 
-    public static final Map<String, Class<?>> primitiveTypes;
+    private static final Set<TypeDescription> types;
+
+    public static final Map<String, Class<? extends Number>> primitiveTypes;
 
     public static final Map<String, Class<?>> wrapperTypes;
 
     public static final Map<Class<?>, Integer> typesNestingRules;
-
-    //private static final Map<Class<?>, Class<?>> primitiveToWrapperLinks;
 
     static {
         primitiveTypes = Map.of(
@@ -61,5 +63,25 @@ public class NumberTypeResolver {
                 short.class, 5,
                 byte.class, 6
         );
+
+        types = Set.of(
+                new NumberTypeDescription<>(Double.class, Double.TYPE),
+                new NumberTypeDescription<>(Float.class, Float.TYPE),
+                new NumberTypeDescription<>(Long.class, Long.TYPE),
+                new NumberTypeDescription<>(Integer.class, Integer.TYPE),
+                new NumberTypeDescription<>(Short.class, Short.TYPE),
+                new NumberTypeDescription<>(Byte.class, Byte.TYPE)
+        );
+    }
+
+    public NumberTypeResolver() {
+    }
+
+    public Class<? extends Number> getWrapTypeForPrimitive(Class<? extends Number> primitiveType) {
+        Optional<TypeDescription> typeDescription =  this.types.stream()
+                .filter(type -> type.getPrimitiveType().equals(primitiveType))
+                .findAny();
+
+        return typeDescription.isPresent() ? typeDescription.get().getWrapperType() : primitiveType;
     }
 }

@@ -16,6 +16,8 @@
  */
 package org.java.number.extension.parsing;
 
+import org.java.number.extension.parsing.internal.type.NumberTypeResolver;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -49,8 +51,10 @@ public final class NumberParser {
     }
 
     public <T extends Number> T parse(Class<T> type, String from) {
-        ParsingStrategy parsingStrategy = this.getParsingStrategy(type.getClass());
+        NumberTypeResolver numberTypeResolver = new NumberTypeResolver();
+        type = (Class<T>) numberTypeResolver.getWrapTypeForPrimitive(type);
 
+        ParsingStrategy parsingStrategy = this.getParsingStrategy(type.getClass());
 
         Constructor constructor = null;
         Class<?> primitiveType = null;

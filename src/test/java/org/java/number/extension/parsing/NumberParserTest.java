@@ -54,7 +54,8 @@ public class NumberParserTest {
     @MethodSource("getDirtyStringsForTestParamsProvider")
     @ParameterizedTest
     public void parse_parseDirtyStringWithDigitSymbols_returnDoubleNumber(Double expectedValue, String originValue) {
-        Double actualValue = NumberParser.newInstance().parse(Double.class, originValue);
+        Double actualValue = NumberParser.newInstance()
+                .parse(Double.class, originValue);
 
         assertTrue(
                 actualValue.equals(expectedValue),
@@ -80,6 +81,17 @@ public class NumberParserTest {
 
         assertTrue(
                 actualValue.equals(expectedValue.floatValue()),
+                String.format("Expected %s, but was %s", expectedValue, actualValue)
+        );
+    }
+
+    @MethodSource("getDirtyStringsForTestParamsProvider")
+    @ParameterizedTest
+    public void parse_parseDirtyStringWithDigitSymbols_returnPrimitiveDoubleNumber(Double expectedValue, String originValue) {
+        double actualValue = NumberParser.newInstance().parse(double.class, originValue);
+
+        assertTrue(
+                actualValue == expectedValue,
                 String.format("Expected %s, but was %s", expectedValue, actualValue)
         );
     }

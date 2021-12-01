@@ -14,28 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.java.number.extension.parsing;
+package org.java.number.extension.parsing.internal.type;
 
 /**
  * @project java-number-extension
- * @created 2021-09-28 18:54
+ * @created 2021-12-01 20:32
  * <p>
  * @author Alexander A. Kropotin
  */
-@FunctionalInterface
-public interface ParsingStrategy<T extends Number> {
+public interface TypeDescription<W extends Number, P extends Number> {
 
-    /**
-     * Parse number from dirty string value.
-     * This parse method have to:
-     * 1 - get value as a {@Code string},
-     * 2 - skip all non digit symbols
-     * 3 - parse sign value {1, -1}, integer and fractional parts, and exponents values from e-notation
-     * 4 - generate {@code Number} by this formula:
-     * {@code x = (integer + fractional) * sign * sum(exponents)}
-     *
-     * @param value the dirty string
-     * @return the number value from a dirty string
-     */
-    T apply(String value);
+    Class<W> getWrapperType();
+
+    Class<P> getPrimitiveType();
+
+    boolean hasPrimitiveType();
 }
