@@ -20,13 +20,21 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * @project java-number-extension
- * @created 2021-11-29 22:19
- * <p>
+ * The type Number factory.
+ *
  * @author Alexander A. Kropotin
+ * @project java -number-extension
+ * @created 2021 -11-29 22:19 <p>
  */
 public class NumberFactory {
 
+    /**
+     * New instance t.
+     *
+     * @param <T>  the type parameter
+     * @param type the type
+     * @return the t
+     */
     public <T extends Number> T newInstance(Class<T> type) {
         Constructor[] constructors = type.getDeclaredConstructors();
 

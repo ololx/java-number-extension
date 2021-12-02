@@ -16,72 +16,110 @@
  */
 package org.java.number.extension.parsing.internal.type;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 /**
- * @project java-number-extension
- * @created 2021-11-30 20:51
- * <p>
+ * The type Number type resolver.
+ *
  * @author Alexander A. Kropotin
+ * @project java -number-extension
+ * @created 2021 -11-30 20:51 <p>
  */
 public class NumberTypeResolver {
 
-    private static final Set<TypeDescription> types;
+    private static final Set<NumberType> types;
 
-    public static final Map<String, Class<? extends Number>> primitiveTypes;
-
-    public static final Map<String, Class<?>> wrapperTypes;
-
-    public static final Map<Class<?>, Integer> typesNestingRules;
+    /**
+     * The constant typesNestingRules.
+     */
+    public static final NumberTypeTaxonomy typesNestingRules;
 
     static {
-        primitiveTypes = Map.of(
-                "byte", byte.class,
-                "short", short.class,
-                "int", int.class,
-                "long", long.class,
-                "float", float.class,
-                "double", double.class
-        );
-
-        wrapperTypes = Map.of(
-                "Byte", Byte.class,
-                "Short", Short.class,
-                "Int", Integer.class,
-                "Long", Long.class,
-                "Float", Float.class,
-                "Double", Double.class
-        );
-
-        typesNestingRules = Map.of(
-                double.class, 1,
-                float.class, 2,
-                long.class, 3,
-                int.class, 4,
-                short.class, 5,
-                byte.class, 6
+        typesNestingRules = new BasicNumberTypeTaxonomy(
+                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                        new BasicNumberType<>(Double.class, Double.TYPE),
+                        new BasicNumberType<>(Float.class, Float.TYPE),
+                null
+                ),
+                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                        new BasicNumberType<>(Float.class, Float.TYPE),
+                        new BasicNumberType<>(Long.class, Long.TYPE),
+                        new BasicNumberType<>(Double.class, Double.TYPE)
+                ),
+                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                        new BasicNumberType<>(Long.class, Long.TYPE),
+                        new BasicNumberType<>(Integer.class, Integer.TYPE),
+                        new BasicNumberType<>(Float.class, Float.TYPE)
+                ),
+                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                        new BasicNumberType<>(Integer.class, Integer.TYPE),
+                        new BasicNumberType<>(Short.class, Short.TYPE),
+                        new BasicNumberType<>(Long.class, Long.TYPE)
+                ),
+                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                        new BasicNumberType<>(Short.class, Short.TYPE),
+                        new BasicNumberType<>(Byte.class, Byte.TYPE),
+                        new BasicNumberType<>(Integer.class, Integer.TYPE)
+                ),
+                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                        new BasicNumberType<>(Byte.class, Byte.TYPE),
+                        null,
+                        new BasicNumberType<>(Short.class, Short.TYPE)
+                )
         );
 
         types = Set.of(
-                new NumberTypeDescription<>(Double.class, Double.TYPE),
-                new NumberTypeDescription<>(Float.class, Float.TYPE),
-                new NumberTypeDescription<>(Long.class, Long.TYPE),
-                new NumberTypeDescription<>(Integer.class, Integer.TYPE),
-                new NumberTypeDescription<>(Short.class, Short.TYPE),
-                new NumberTypeDescription<>(Byte.class, Byte.TYPE)
+                new BasicNumberType<>(Double.class, Double.TYPE),
+                new BasicNumberType<>(Float.class, Float.TYPE),
+                new BasicNumberType<>(Long.class, Long.TYPE),
+                new BasicNumberType<>(Integer.class, Integer.TYPE),
+                new BasicNumberType<>(Short.class, Short.TYPE),
+                new BasicNumberType<>(Byte.class, Byte.TYPE)
         );
     }
 
+    /**
+     * Instantiates a new Number type resolver.
+     */
     public NumberTypeResolver() {
     }
 
+    /**
+     * Gets wrap type for primitive.
+     *
+     * @param primitiveType the primitive type
+     * @return the wrap type for primitive
+     */
     public Class<? extends Number> getWrapTypeForPrimitive(Class<? extends Number> primitiveType) {
-        Optional<TypeDescription> typeDescription =  this.types.stream()
+        Optional<NumberType> typeDescription =  this.types.stream()
                 .filter(type -> type.getPrimitiveType().equals(primitiveType))
                 .findAny();
 
         return typeDescription.isPresent() ? typeDescription.get().getWrapperType() : primitiveType;
+    }
+
+    /**
+     * Gets for.
+     *
+     * @param clazz the clazz
+     * @return the for
+     */
+    public NumberType getFor(Class<?> clazz) {
+        Optional<NumberType> typeDescription =  this.types.stream()
+                .filter(type -> type.getPrimitiveType().equals(clazz) || type.getWrapperType().equals(clazz))
+                .findAny();
+
+        return typeDescription.isPresent() ? typeDescription.get() : new BasicNumberType(clazz);
+    }
+
+    /**
+     * Has primitive type boolean.
+     *
+     * @param primitiveType the primitive type
+     * @return the boolean
+     */
+    public boolean hasPrimitiveType(Class<? extends Number> primitiveType) {
+        return this.getFor(primitiveType).hasPrimitiveType();
     }
 }

@@ -17,10 +17,12 @@
 package org.java.number.extension.parsing;
 
 /**
- * @project java-number-extension
- * @created 2021-09-28 18:54
- * <p>
+ * The interface Parsing strategy.
+ *
+ * @param <T> the type parameter
  * @author Alexander A. Kropotin
+ * @project java -number-extension
+ * @created 2021 -09-28 18:54 <p>
  */
 @FunctionalInterface
 public interface ParsingStrategy<T extends Number> {

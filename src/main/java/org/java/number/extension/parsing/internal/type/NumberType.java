@@ -16,17 +16,49 @@
  */
 package org.java.number.extension.parsing.internal.type;
 
-/**
- * @project java-number-extension
- * @created 2021-12-01 20:32
- * <p>
- * @author Alexander A. Kropotin
- */
-public interface TypeDescription<W extends Number, P extends Number> {
+import java.lang.reflect.Type;
 
+/**
+ * The interface Number type.
+ *
+ * @param <W> the type parameter
+ * @param <P> the type parameter
+ * @author Alexander A. Kropotin
+ * @project java -number-extension
+ * @created 2021 -12-01 20:32 <p>
+ */
+public interface NumberType<W extends Number, P extends Number> extends Type {
+
+    /**
+     * Gets wrapper type.
+     *
+     * @return the wrapper type
+     */
     Class<W> getWrapperType();
 
+    /**
+     * Gets primitive type.
+     *
+     * @return the primitive type
+     */
     Class<P> getPrimitiveType();
 
+    /**
+     * Has primitive type boolean.
+     *
+     * @return the boolean
+     */
     boolean hasPrimitiveType();
+
+    @Override
+    default String getTypeName() {
+        String typeName = this.getWrapperType().getCanonicalName();
+
+        int lastDotIndex = 0;
+        if ((lastDotIndex = typeName.lastIndexOf("\\.")) > -1) {
+            typeName = typeName.substring(lastDotIndex);
+        }
+
+        return typeName;
+    }
 }

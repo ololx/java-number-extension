@@ -16,25 +16,37 @@
  */
 package org.java.number.extension.parsing.internal.type;
 
-import java.util.Objects;
-
 /**
- * @project java-number-extension
- * @created 2021-12-01 20:52
- * <p>
+ * The type Basic number type.
+ *
+ * @param <W> the type parameter
+ * @param <P> the type parameter
  * @author Alexander A. Kropotin
+ * @project java -number-extension
+ * @created 2021 -12-01 20:52 <p>
  */
-public class NumberTypeDescription<W extends Number, P extends Number> implements TypeDescription<W, P> {
+public class BasicNumberType<W extends Number, P extends Number> implements NumberType<W, P> {
 
     private final Class<W> wrapperType;
 
     private final Class<P> primitiveType;
 
-    public NumberTypeDescription(Class<W> wrapperType) {
+    /**
+     * Instantiates a new Basic number type.
+     *
+     * @param wrapperType the wrapper type
+     */
+    public BasicNumberType(Class<W> wrapperType) {
         this(wrapperType, null);
     }
 
-    public NumberTypeDescription(Class<W> wrapperType, Class<P> primitiveType) {
+    /**
+     * Instantiates a new Basic number type.
+     *
+     * @param wrapperType   the wrapper type
+     * @param primitiveType the primitive type
+     */
+    public BasicNumberType(Class<W> wrapperType, Class<P> primitiveType) {
         if (wrapperType == null)
             throw new NullPointerException("The wrapper type couldn't be null");
         if (wrapperType.isPrimitive())
@@ -49,10 +61,10 @@ public class NumberTypeDescription<W extends Number, P extends Number> implement
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!(obj instanceof NumberTypeDescription))
+        if (!(obj instanceof BasicNumberType))
             return false;
 
-        NumberTypeDescription<?, ?> other = (NumberTypeDescription<?, ?>) obj;
+        BasicNumberType<?, ?> other = (BasicNumberType<?, ?>) obj;
 
         return this.wrapperType == other.wrapperType
                 && this.primitiveType == other.primitiveType;
@@ -71,7 +83,7 @@ public class NumberTypeDescription<W extends Number, P extends Number> implement
 
     @Override
     public String toString() {
-        return "NumberTypeDescription {\n" +
+        return this.getClass().getCanonicalName() + "{\n" +
                 "wrapperType=" + wrapperType + "\n" +
                 ", primitiveType=" + primitiveType + "\n" +
                 '}';

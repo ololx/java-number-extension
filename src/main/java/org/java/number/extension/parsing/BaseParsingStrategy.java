@@ -17,10 +17,11 @@
 package org.java.number.extension.parsing;
 
 /**
- * @project java-number-extension
- * @created 2021-09-29 12:51
- * <p>
+ * The type Base parsing strategy.
+ *
  * @author Alexander A. Kropotin
+ * @project java -number-extension
+ * @created 2021 -09-29 12:51 <p>
  */
 public class BaseParsingStrategy implements ParsingStrategy<Number> {
 

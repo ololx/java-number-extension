@@ -23,13 +23,19 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * @project java-number-extension
- * @created 2021-11-29 21:51
- * <p>
+ * The type Number parser.
+ *
  * @author Alexander A. Kropotin
+ * @project java -number-extension
+ * @created 2021 -11-29 21:51 <p>
  */
 public final class NumberParser {
 
+    /**
+     * New instance number parser.
+     *
+     * @return the number parser
+     */
     public static NumberParser newInstance() {
         return new NumberParser();
     }
@@ -40,16 +46,32 @@ public final class NumberParser {
         parsingStrategies = Map.of(Number.class, new BaseParsingStrategy());
     }
 
+    /**
+     * Instantiates a new Number parser.
+     */
     public NumberParser() {
         this(null);
     }
 
+    /**
+     * Instantiates a new Number parser.
+     *
+     * @param parsingStrategies the parsing strategies
+     */
     public NumberParser(Map<Class<? extends Number>, ParsingStrategy<? extends Number>> parsingStrategies) {
         if (parsingStrategies == null) return;
 
         this.parsingStrategies.putAll(parsingStrategies);
     }
 
+    /**
+     * Parse t.
+     *
+     * @param <T>  the type parameter
+     * @param type the type
+     * @param from the from
+     * @return the t
+     */
     public <T extends Number> T parse(Class<T> type, String from) {
         NumberTypeResolver numberTypeResolver = new NumberTypeResolver();
         type = (Class<T>) numberTypeResolver.getWrapTypeForPrimitive(type);
@@ -62,10 +84,12 @@ public final class NumberParser {
             if (declaredConstructor.getGenericParameterTypes().length != 1) continue;
 
             for (Class<?> parameterType : declaredConstructor.getParameterTypes()) {
-                if (!NumberTypeResolver.primitiveTypes.containsValue(parameterType)) continue;
+                if (!numberTypeResolver.hasPrimitiveType((Class<? extends Number>) parameterType)) continue;
                 if (primitiveType != null
-                        && NumberTypeResolver.typesNestingRules.get(parameterType) > NumberTypeResolver.typesNestingRules.get(primitiveType))
-                    continue;
+                        && !numberTypeResolver.typesNestingRules.isSuperNumberTypeOf(
+                                numberTypeResolver.getFor(parameterType),
+                        numberTypeResolver.getFor(primitiveType)
+                )) continue;
 
                 primitiveType = parameterType;
                 constructor = declaredConstructor;
@@ -83,7 +107,7 @@ public final class NumberParser {
 
             number = (T) constructor.newInstance(
                     res.getClass()
-                            .getMethod(NumberTypeResolver.primitiveTypes.get(primitiveType.getCanonicalName()).getCanonicalName() + "Value")
+                            .getMethod(primitiveType.getCanonicalName() + "Value")
                             .invoke(res)
             );
         } catch (Exception e) {
