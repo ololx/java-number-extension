@@ -17,49 +17,49 @@
 package org.java.number.extension.parsing;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import utils.CSVTestCaseLoader;
 
-import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
- * @project java-number-extension
- * @created 2021-09-29 12:59
- * <p>
+ * The type Base number parsing test.
+ *
  * @author Alexander A. Kropotin
+ * @project java -number-extension
+ * @created 2021 -09-29 12:59 <p>
  */
 @DisplayName("The BaseNumberParsing test cases")
 public class BaseNumberParsingTest {
 
+    /**
+     * Gets dirty strings for test params provider.
+     *
+     * @return the dirty strings for test params provider
+     */
     static Stream<Arguments> getDirtyStringsForTestParamsProvider() {
-        return Stream.of(
-                arguments(1.0, "01"),
-                arguments(1.0, "01.0"),
-                arguments(1.0, "1.0"),
-                arguments(1.0, "1.0E0"),
-                arguments(1.0, "1FckUp.0"),
-                arguments(10000.0, "1E+2E+2"),
-                arguments(100.0, "1E2E-2E+2"),
-                arguments(47.82, "47,8кгс/мм2"),
-                arguments(47.82, "47,8кгсмм2"),
-                arguments(47.123456, "47,123кгс/мм456")
-        );
+        return new CSVTestCaseLoader().load("dirty-strings-cases.csv").stream()
+                .map(eachCase -> Arguments.of(eachCase.toArray()));
     }
 
+    /**
+     * Apply parse dirty string with digit symbols return number.
+     *
+     * @param expectedValue the expected value
+     * @param originValue   the origin value
+     */
     @DisplayName("[positive]: test number parsing from string with dirty symbols")
     @MethodSource("getDirtyStringsForTestParamsProvider")
     @ParameterizedTest
-    public void apply_parseDirtyStringWithDigitSymbols_returnNumber(Number expectedValue, String originValue) {
+    public void apply_parseDirtyStringWithDigitSymbols_returnNumber(Double expectedValue, String originValue) {
         Number actualValue = new BaseParsingStrategy().apply(originValue);
 
         assertTrue(
-                actualValue.equals(expectedValue),
+                actualValue.doubleValue() == expectedValue,
                 String.format("Expected %s, but was %s", expectedValue, actualValue)
         );
     }

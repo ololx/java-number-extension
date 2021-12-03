@@ -38,44 +38,44 @@ public class NumberTypeResolver {
     static {
         typesNestingRules = new BasicNumberTypeTaxonomy(
                 new BasicNumberTypeTaxonomy.NumberTypeNode<>(
-                        new BasicNumberType<>(Double.class, Double.TYPE),
-                        new BasicNumberType<>(Float.class, Float.TYPE),
+                        BasicNumberType.newInstance(Double.class, Double.TYPE),
+                        BasicNumberType.newInstance(Float.class, Float.TYPE),
                 null
                 ),
                 new BasicNumberTypeTaxonomy.NumberTypeNode<>(
-                        new BasicNumberType<>(Float.class, Float.TYPE),
-                        new BasicNumberType<>(Long.class, Long.TYPE),
-                        new BasicNumberType<>(Double.class, Double.TYPE)
+                        BasicNumberType.newInstance(Float.class, Float.TYPE),
+                        BasicNumberType.newInstance(Long.class, Long.TYPE),
+                        BasicNumberType.newInstance(Double.class, Double.TYPE)
                 ),
                 new BasicNumberTypeTaxonomy.NumberTypeNode<>(
-                        new BasicNumberType<>(Long.class, Long.TYPE),
-                        new BasicNumberType<>(Integer.class, Integer.TYPE),
-                        new BasicNumberType<>(Float.class, Float.TYPE)
+                        BasicNumberType.newInstance(Long.class, Long.TYPE),
+                        BasicNumberType.newInstance(Integer.class, Integer.TYPE),
+                        BasicNumberType.newInstance(Float.class, Float.TYPE)
                 ),
                 new BasicNumberTypeTaxonomy.NumberTypeNode<>(
-                        new BasicNumberType<>(Integer.class, Integer.TYPE),
-                        new BasicNumberType<>(Short.class, Short.TYPE),
-                        new BasicNumberType<>(Long.class, Long.TYPE)
+                        BasicNumberType.newInstance(Integer.class, Integer.TYPE),
+                        BasicNumberType.newInstance(Short.class, Short.TYPE),
+                        BasicNumberType.newInstance(Long.class, Long.TYPE)
                 ),
                 new BasicNumberTypeTaxonomy.NumberTypeNode<>(
-                        new BasicNumberType<>(Short.class, Short.TYPE),
-                        new BasicNumberType<>(Byte.class, Byte.TYPE),
-                        new BasicNumberType<>(Integer.class, Integer.TYPE)
+                        BasicNumberType.newInstance(Short.class, Short.TYPE),
+                        BasicNumberType.newInstance(Byte.class, Byte.TYPE),
+                        BasicNumberType.newInstance(Integer.class, Integer.TYPE)
                 ),
                 new BasicNumberTypeTaxonomy.NumberTypeNode<>(
-                        new BasicNumberType<>(Byte.class, Byte.TYPE),
+                        BasicNumberType.newInstance(Byte.class, Byte.TYPE),
                         null,
-                        new BasicNumberType<>(Short.class, Short.TYPE)
+                        BasicNumberType.newInstance(Short.class, Short.TYPE)
                 )
         );
 
         types = Set.of(
-                new BasicNumberType<>(Double.class, Double.TYPE),
-                new BasicNumberType<>(Float.class, Float.TYPE),
-                new BasicNumberType<>(Long.class, Long.TYPE),
-                new BasicNumberType<>(Integer.class, Integer.TYPE),
-                new BasicNumberType<>(Short.class, Short.TYPE),
-                new BasicNumberType<>(Byte.class, Byte.TYPE)
+                BasicNumberType.newInstance(Double.class, Double.TYPE),
+                BasicNumberType.newInstance(Float.class, Float.TYPE),
+                BasicNumberType.newInstance(Long.class, Long.TYPE),
+                BasicNumberType.newInstance(Integer.class, Integer.TYPE),
+                BasicNumberType.newInstance(Short.class, Short.TYPE),
+                BasicNumberType.newInstance(Byte.class, Byte.TYPE)
         );
     }
 

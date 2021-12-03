@@ -27,6 +27,14 @@ package org.java.number.extension.parsing.internal.type;
  */
 public class BasicNumberType<W extends Number, P extends Number> implements NumberType<W, P> {
 
+    public static BasicNumberType newInstance(Class<? extends Number> wrapperType) {
+        return new BasicNumberType<>(wrapperType);
+    }
+
+    public static BasicNumberType newInstance(Class<? extends Number> wrapperType, Class<? extends Number> primitiveType) {
+        return new BasicNumberType<>(wrapperType, primitiveType);
+    }
+
     private final Class<W> wrapperType;
 
     private final Class<P> primitiveType;
