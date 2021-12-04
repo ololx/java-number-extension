@@ -18,7 +18,6 @@ package org.java.number.extension.parsing.internal.type;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -29,7 +28,7 @@ import java.util.Map;
  * @project java -number-extension
  * @created 2021 -12-02 13:32 <p>
  */
-public class BasicNumberTypeTaxonomy<T extends NumberType> implements NumberTypeTaxonomy<T> {
+public class BasicNumberTypeTaxonomyOld<T extends NumberType> implements NumberTypeTaxonomy<T> {
 
     private Map<T, NumberTypeNode> numberTypeNodeMap;
 
@@ -42,7 +41,7 @@ public class BasicNumberTypeTaxonomy<T extends NumberType> implements NumberType
      *
      * @param numberTypeNodeMap the number type node map
      */
-    public BasicNumberTypeTaxonomy(NumberTypeNode<T>... numberTypeNodeMap) {
+    public BasicNumberTypeTaxonomyOld(NumberTypeNode<T>... numberTypeNodeMap) {
         if (numberTypeNodeMap == null) return;
         Arrays.stream(numberTypeNodeMap).forEach(node -> this.numberTypeNodeMap.put(node.getNumberType(), node));
     }

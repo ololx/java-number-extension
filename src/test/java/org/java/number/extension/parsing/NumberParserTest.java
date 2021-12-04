@@ -128,7 +128,7 @@ public class NumberParserTest {
         BigDecimal actualValue = NumberParser.newInstance().parse(BigDecimal.class, originValue);
 
         assertTrue(
-                actualValue.doubleValue() == expectedValue.doubleValue(),
+                actualValue.compareTo(BigDecimal.valueOf(expectedValue)) == 0,
                 String.format("Expected %s, but was %s", expectedValue, actualValue)
         );
     }

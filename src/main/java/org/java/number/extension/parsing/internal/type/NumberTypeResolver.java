@@ -16,6 +16,7 @@
  */
 package org.java.number.extension.parsing.internal.type;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,33 +37,33 @@ public class NumberTypeResolver {
     public static final NumberTypeTaxonomy typesNestingRules;
 
     static {
-        typesNestingRules = new BasicNumberTypeTaxonomy(
-                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+        typesNestingRules = new BasicNumberTypeTaxonomyOld(
+                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
                         BasicNumberType.newInstance(Double.class, Double.TYPE),
                         BasicNumberType.newInstance(Float.class, Float.TYPE),
                 null
                 ),
-                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
                         BasicNumberType.newInstance(Float.class, Float.TYPE),
                         BasicNumberType.newInstance(Long.class, Long.TYPE),
                         BasicNumberType.newInstance(Double.class, Double.TYPE)
                 ),
-                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
                         BasicNumberType.newInstance(Long.class, Long.TYPE),
                         BasicNumberType.newInstance(Integer.class, Integer.TYPE),
                         BasicNumberType.newInstance(Float.class, Float.TYPE)
                 ),
-                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
                         BasicNumberType.newInstance(Integer.class, Integer.TYPE),
                         BasicNumberType.newInstance(Short.class, Short.TYPE),
                         BasicNumberType.newInstance(Long.class, Long.TYPE)
                 ),
-                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
                         BasicNumberType.newInstance(Short.class, Short.TYPE),
                         BasicNumberType.newInstance(Byte.class, Byte.TYPE),
                         BasicNumberType.newInstance(Integer.class, Integer.TYPE)
                 ),
-                new BasicNumberTypeTaxonomy.NumberTypeNode<>(
+                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
                         BasicNumberType.newInstance(Byte.class, Byte.TYPE),
                         null,
                         BasicNumberType.newInstance(Short.class, Short.TYPE)
@@ -95,6 +96,8 @@ public class NumberTypeResolver {
         Optional<NumberType> typeDescription =  this.types.stream()
                 .filter(type -> type.getPrimitiveType().equals(primitiveType))
                 .findAny();
+
+        new ArrayList<>()
 
         return typeDescription.isPresent() ? typeDescription.get().getWrapperType() : primitiveType;
     }
