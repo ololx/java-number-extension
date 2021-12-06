@@ -16,10 +16,13 @@
  */
 package org.java.number.extension.parsing;
 
+import com.sun.jdi.ByteType;
 import org.java.number.extension.parsing.base.DirectionalGraph;
 import org.java.number.extension.parsing.base.Graph;
 import org.java.number.extension.parsing.internal.type.BasicNumberType;
 import org.java.number.extension.parsing.internal.type.NumberType;
+import org.java.number.extension.parsing.internal.type.NumberTypeResolver;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,45 +30,38 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import utils.CSVTestCaseLoader;
 
+import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The type Base number parsing test.
+ * The type Number parser test.
  *
  * @author Alexander A. Kropotin
  * @project java -number-extension
- * @created 2021 -09-29 12:59 <p>
+ * @created 2021 -11-30 21:41 <p>
  */
-@DisplayName("The BaseNumberParsing test cases")
-public class BaseNumberParsingTest {
+@DisplayName("The NumberTypeResolverTest test cases")
+public class NumberTypeResolverTest {
 
-    /**
-     * Gets dirty strings for test params provider.
-     *
-     * @return the dirty strings for test params provider
-     */
-    static Stream<Arguments> getDirtyStringsForTestParamsProvider() {
-        return new CSVTestCaseLoader().load("dirty-strings-cases.csv").stream()
-                .map(eachCase -> Arguments.of(eachCase.toArray()));
+    static final NumberTypeResolver numberTypeResolver = new NumberTypeResolver();
+
+    @DisplayName("[positive]: test compareExpressiveness method type < otherType")
+    @Test
+    public void compareExpressiveness_whenFirstTypeIsLessExpressive_thenReturnNegativeOne() {
+        assertTrue(numberTypeResolver.compareExpressiveness(Byte.TYPE, Double.TYPE) == -1);
     }
 
-    /**
-     * Apply parse dirty string with digit symbols return number.
-     *
-     * @param expectedValue the expected value
-     * @param originValue   the origin value
-     */
-    @DisplayName("[positive]: test number parsing from string with dirty symbols")
-    @MethodSource("getDirtyStringsForTestParamsProvider")
-    @ParameterizedTest
-    public void apply_parseDirtyStringWithDigitSymbols_returnNumber(Double expectedValue, String originValue) {
-        Number actualValue = new BaseParsingStrategy().apply(originValue);
+    @DisplayName("[positive]: test compareExpressiveness method type > otherType")
+    @Test
+    public void compareExpressiveness_whenFirstTypeIsMoreExpressive_thenReturnOne() {
+        assertTrue(numberTypeResolver.compareExpressiveness(Double.TYPE, Byte.TYPE) == 1);
+    }
 
-        assertTrue(
-                actualValue.doubleValue() == expectedValue,
-                String.format("Expected %s, but was %s", expectedValue, actualValue)
-        );
+    @DisplayName("[positive]: test compareExpressiveness method type == otherType")
+    @Test
+    public void compareExpressiveness_whenFirstTypeIsEqualeExpressive_thenReturnZero() {
+        assertTrue(numberTypeResolver.compareExpressiveness(Byte.TYPE, Byte.TYPE) == 0);
     }
 }

@@ -86,10 +86,10 @@ public final class NumberParser {
             for (Class<?> parameterType : declaredConstructor.getParameterTypes()) {
                 if (!numberTypeResolver.hasPrimitiveType((Class<? extends Number>) parameterType)) continue;
                 if (primitiveType != null
-                        && !numberTypeResolver.typesNestingRules.isSuperNumberTypeOf(
-                                numberTypeResolver.getFor(parameterType),
-                        numberTypeResolver.getFor(primitiveType)
-                )) continue;
+                        && numberTypeResolver.compareExpressiveness(
+                                (Class<? extends Number>) parameterType,
+                        (Class<? extends Number>) primitiveType) > 0
+                ) continue;
 
                 primitiveType = parameterType;
                 constructor = declaredConstructor;

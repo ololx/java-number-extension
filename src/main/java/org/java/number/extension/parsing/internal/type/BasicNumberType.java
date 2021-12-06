@@ -16,6 +16,9 @@
  */
 package org.java.number.extension.parsing.internal.type;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * The type Basic number type.
  *
@@ -34,6 +37,9 @@ public class BasicNumberType<W extends Number, P extends Number> implements Numb
     public static BasicNumberType newInstance(Class<? extends Number> wrapperType, Class<? extends Number> primitiveType) {
         return new BasicNumberType<>(wrapperType, primitiveType);
     }
+
+    //TODO:: Добавить реализацию позже
+    //private static Set<BasicNumberType> cash = new HashSet<>();
 
     private final Class<W> wrapperType;
 
@@ -62,7 +68,6 @@ public class BasicNumberType<W extends Number, P extends Number> implements Numb
         this.wrapperType = wrapperType;
 
         this.primitiveType = primitiveType;
-
     }
 
     @Override

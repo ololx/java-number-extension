@@ -16,23 +16,81 @@
  */
 package org.java.number.extension.parsing.base;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
- * @project java-number-extension
- * @created 2021-12-04 15:06
- * <p>
+ * The interface Graph.
+ *
+ * @param <V> the type parameter
  * @author Alexander A. Kropotin
+ * @project java -number-extension
+ * @created 2021 -12-04 15:06 <p>
  */
 public interface Graph<V> {
 
+    /**
+     * Add vertex.
+     *
+     * @param vertex the vertex
+     */
     void addVertex(V vertex);
 
+    /**
+     * Remove vertex v.
+     *
+     * @param vertex the vertex
+     * @return the v
+     */
     V removeVertex(V vertex);
 
+    Collection<V> getVertexes();
+
+    /**
+     * Add edge.
+     *
+     * @param vertex the vertex
+     * @param apex   the apex
+     */
+    void addEdge(V vertex, V apex);
+
+    /**
+     * Remove edge boolean.
+     *
+     * @param vertex the vertex
+     * @param apex   the apex
+     * @return the boolean
+     */
+    boolean removeEdge(V vertex, V apex);
+
+    /**
+     * Gets vertex count.
+     *
+     * @return the vertex count
+     */
     long getVertexCount();
 
+    /**
+     * Gets edges count.
+     *
+     * @return the edges count
+     */
     long getEdgesCount();
 
-    void hasVertex(V vertex);
+    /**
+     * Has vertex boolean.
+     *
+     * @param vertex the vertex
+     * @return the boolean
+     */
+    boolean hasVertex(V vertex);
 
-    void hasEdge(V vertex, V apex);
+    /**
+     * Has edge boolean.
+     *
+     * @param vertex the vertex
+     * @param apex   the apex
+     * @return the boolean
+     */
+    boolean hasEdge(V vertex, V apex);
 }

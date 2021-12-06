@@ -16,7 +16,9 @@
  */
 package org.java.number.extension.parsing.internal.type;
 
-import java.util.ArrayList;
+import org.java.number.extension.parsing.base.DirectionalGraph;
+import org.java.number.extension.parsing.base.Graph;
+
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,55 +31,34 @@ import java.util.Set;
  */
 public class NumberTypeResolver {
 
-    private static final Set<NumberType> types;
+    private static Set<NumberType> types;
 
-    /**
-     * The constant typesNestingRules.
-     */
-    public static final NumberTypeTaxonomy typesNestingRules;
+    public static Graph<NumberType> typesExpressivity;
 
     static {
-        typesNestingRules = new BasicNumberTypeTaxonomyOld(
-                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
-                        BasicNumberType.newInstance(Double.class, Double.TYPE),
-                        BasicNumberType.newInstance(Float.class, Float.TYPE),
-                null
-                ),
-                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
-                        BasicNumberType.newInstance(Float.class, Float.TYPE),
-                        BasicNumberType.newInstance(Long.class, Long.TYPE),
-                        BasicNumberType.newInstance(Double.class, Double.TYPE)
-                ),
-                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
-                        BasicNumberType.newInstance(Long.class, Long.TYPE),
-                        BasicNumberType.newInstance(Integer.class, Integer.TYPE),
-                        BasicNumberType.newInstance(Float.class, Float.TYPE)
-                ),
-                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
-                        BasicNumberType.newInstance(Integer.class, Integer.TYPE),
-                        BasicNumberType.newInstance(Short.class, Short.TYPE),
-                        BasicNumberType.newInstance(Long.class, Long.TYPE)
-                ),
-                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
-                        BasicNumberType.newInstance(Short.class, Short.TYPE),
-                        BasicNumberType.newInstance(Byte.class, Byte.TYPE),
-                        BasicNumberType.newInstance(Integer.class, Integer.TYPE)
-                ),
-                new BasicNumberTypeTaxonomyOld.NumberTypeNode<>(
-                        BasicNumberType.newInstance(Byte.class, Byte.TYPE),
-                        null,
-                        BasicNumberType.newInstance(Short.class, Short.TYPE)
-                )
+        typesExpressivity = new DirectionalGraph<>();
+        typesExpressivity.addEdge(
+                BasicNumberType.newInstance(Byte.class, Byte.TYPE),
+                BasicNumberType.newInstance(Short.class, Short.TYPE)
+        );
+        typesExpressivity.addEdge(
+                BasicNumberType.newInstance(Short.class, Short.TYPE),
+                BasicNumberType.newInstance(Integer.class, Integer.TYPE)
+        );
+        typesExpressivity.addEdge(
+                BasicNumberType.newInstance(Integer.class, Integer.TYPE),
+                BasicNumberType.newInstance(Long.class, Long.TYPE)
+        );
+        typesExpressivity.addEdge(
+                BasicNumberType.newInstance(Long.class, Long.TYPE),
+                BasicNumberType.newInstance(Float.class, Float.TYPE)
+        );
+        typesExpressivity.addEdge(
+                BasicNumberType.newInstance(Float.class, Float.TYPE),
+                BasicNumberType.newInstance(Double.class, Double.TYPE)
         );
 
-        types = Set.of(
-                BasicNumberType.newInstance(Double.class, Double.TYPE),
-                BasicNumberType.newInstance(Float.class, Float.TYPE),
-                BasicNumberType.newInstance(Long.class, Long.TYPE),
-                BasicNumberType.newInstance(Integer.class, Integer.TYPE),
-                BasicNumberType.newInstance(Short.class, Short.TYPE),
-                BasicNumberType.newInstance(Byte.class, Byte.TYPE)
-        );
+        types = (Set<NumberType>) typesExpressivity.getVertexes();
     }
 
     /**
@@ -97,8 +78,6 @@ public class NumberTypeResolver {
                 .filter(type -> type.getPrimitiveType().equals(primitiveType))
                 .findAny();
 
-        new ArrayList<>()
-
         return typeDescription.isPresent() ? typeDescription.get().getWrapperType() : primitiveType;
     }
 
@@ -108,7 +87,7 @@ public class NumberTypeResolver {
      * @param clazz the clazz
      * @return the for
      */
-    public NumberType getFor(Class<?> clazz) {
+    public NumberType getFor(Class<? extends Number> clazz) {
         Optional<NumberType> typeDescription =  this.types.stream()
                 .filter(type -> type.getPrimitiveType().equals(clazz) || type.getWrapperType().equals(clazz))
                 .findAny();
@@ -124,5 +103,18 @@ public class NumberTypeResolver {
      */
     public boolean hasPrimitiveType(Class<? extends Number> primitiveType) {
         return this.getFor(primitiveType).hasPrimitiveType();
+    }
+
+    public int compareExpressiveness(Class<? extends Number> type, Class<? extends Number> otherType) {
+        return compareExpressiveness(this.getFor(type), this.getFor(otherType));
+    }
+
+    public int compareExpressiveness(NumberType type, NumberType otherType) {
+        if (typesExpressivity.hasEdge(otherType, type))
+            return 1;
+        else if (typesExpressivity.hasEdge(type, otherType))
+            return -1;
+        else
+            return 0;
     }
 }
