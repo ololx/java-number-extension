@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.java.number.extension</groupId>
+    <groupId>io.githhub.java.number.extension</groupId>
     <artifactId>java-number-extension</artifactId>
     <version>${revision}${sha1}${changelist}</version>
     <name>java-number-extension</name>
@@ -44,19 +44,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.9</java.version>
         <junit-jupiter.version>5.5.2</junit-jupiter.version>
-        <github.global.server>github</github.global.server>
-        <github.maven-plugin>0.12</github.maven-plugin>
     </properties>
-
-    <!--<deploy on repository-->
-    <distributionManagement>
-        <repository>
-            <id>java-number-extension.repository</id>
-            <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/java-number-extension-repository</url>
-        </repository>
-    </distributionManagement>
-    <!--deploy on repository>-->
 
     <dependencies>
         <!--<test-->
@@ -94,64 +82,22 @@
                 </configuration>
             </plugin>
             <!--compiler>-->
-            <!--<deploy on repository-->
+            <!--<test-->
             <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
                 <configuration>
-                    <altDeploymentRepository>
-                        java-number-extension.repository::default::file://${project.build.directory}/java-number-extension-repository
-                    </altDeploymentRepository>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>${github.maven-plugin}</version>
-                <configuration>
-                    <message>Maven artifacts for java-number-extension project ${revision}${sha1}${changelist}</message>
-                    <noJekyll>true</noJekyll>
-                    <outputDirectory>${project.build.directory}/java-number-extension-repository</outputDirectory>
-                    <branch>refs/heads/java-number-extension-repository</branch>
-                    <repositoryName>java-number-extension</repositoryName>
-                    <repositoryOwner>ololx</repositoryOwner>
-                    <!--<includes>
-                        <include></include>
+                    <includes>
+                        <include>**Test*</include>
                     </includes>
                     <excludes>
                         <exclude></exclude>
-                    </excludes>-->
+                    </excludes>
+                    <excludedGroups></excludedGroups>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                    </execution>
-                </executions>
             </plugin>
-            <!--deploy on repository>-->
-            <!-- JaCoCo plugin -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--test>-->
         </plugins>
     </build>
 </project>
